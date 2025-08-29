@@ -1,1 +1,183 @@
-//Pantalla
+     A*%%TS  SD  20250829  152825  CJB403307   REL-V7R5M0  5770-WDS
+     A*%%EC
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      INDARA
+     A          R PIE1
+     A*%%TS  SD  20240919  082619  CB403307    REL-V7R4M0  5770-WDS
+     A                                 22  2'F3=SALIR'
+     A                                      COLOR(BLU)
+     A                                 22 11'F6=AGREGAR'
+     A                                      COLOR(BLU)
+     A          R PERDTASFL1                SFL
+     A*%%TS  SD  20250829  152825  CJB403307   REL-V7R5M0  5770-WDS
+     A            OPCION         1A  I 11  4
+     A            SFL_NUMDNI    18A  O 11  7
+     A            SFL_NOMBRE    20A  O 11 26
+     A            SFL_EDAD       3A  O 11 47
+     A            SFL_GENERO     1A  O 11 54
+     A            SFL_USRING    10A  O 11 59
+     A            SFL_FECING    10A  O 11 70
+     A          R PERDTACTL1                SFLCTL(PERDTASFL1)
+     A*%%TS  SD  20250829  152825  CJB403307   REL-V7R5M0  5770-WDS
+     A                                      SFLSIZ(0099)
+     A                                      SFLPAG(0010)
+     A                                      CA03(03 'SALIR')
+     A                                      CA06(06 'AGREGAR')
+     A                                      OVERLAY
+     A  68                                  SFLDSP
+     A  69                                  SFLDSPCTL
+     A  70                                  SFLCLR
+     A  71                                  SFLEND(*MORE)
+     A                                  1  3USER
+     A                                      COLOR(BLU)
+     A            PGMNAME       10A  O  2  3COLOR(BLU)
+     A                                  2 25'Mantenimiento Cuentas Permitidas'
+     A                                      COLOR(WHT)
+     A                                  3 35'por Cliente '
+     A                                      COLOR(WHT)
+     A                                  1 71DATE
+     A                                      EDTCDE(Y)
+     A                                      COLOR(BLU)
+     A                                  2 71TIME
+     A                                      COLOR(BLU)
+     A                                  6  3'C=Consultar'
+     A                                      COLOR(BLU)
+     A                                  6 15'M=Modificar'
+     A                                      COLOR(BLU)
+     A                                  6 27'E=Eliminar'
+     A                                      COLOR(BLU)
+     A                                  7  3'__________________________________-
+     A                                      ___________________________________-
+     A                                      ________'
+     A                                  5  3'Opciones disponibles:'
+     A                                      COLOR(GRN)
+     A                                  8  3'Opc'
+     A                                      COLOR(WHT)
+     A                                  8  7'Numero'
+     A                                      COLOR(WHT)
+     A                                  9  7'DNI'
+     A                                      COLOR(WHT)
+     A                                 10  3'=== ================== ===========-
+     A                                      ========= ==== ====== ========== ==-
+     A                                      ========'
+     A                                  9 26'Nombre'
+     A                                      COLOR(WHT)
+     A                                  9 47'Edad'
+     A                                      COLOR(WHT)
+     A                                  9 52'Genero'
+     A                                      COLOR(WHT)
+     A            $EMPRESA      30A  O  1 26
+     A                                  6 50'Numero DNI:'
+     A            SEARCH_DNI    18A  I  6 62
+     A                                  8 59'Usuario'
+     A                                      COLOR(WHT)
+     A                                  9 59'Ingreso'
+     A                                      COLOR(WHT)
+     A                                  8 70'Fecha'
+     A                                      COLOR(WHT)
+     A                                  9 70'Ingreso'
+     A                                      COLOR(WHT)
+     A          R PERDTAWIN1
+     A*%%TS  SD  20250829  152825  CJB403307   REL-V7R5M0  5770-WDS
+     A                                      CF10(10 'CONFIRMAR')
+     A                                      CA12(12 'CANCELAR')
+     A                                      WINDOW(4 19 12 43)
+     A                                  1  1'Consultar registro'
+     A                                      COLOR(WHT)
+     A                                  4  1'Nombre............:'
+     A                                      COLOR(GRN)
+     A                                 11  1'INTRO=CONTINUAR'
+     A                                      COLOR(BLU)
+     A                                  3  1'Identificacion....:'
+     A            GENERO         1A  O  7 21
+     A                                  8 23'F=Femenino'
+     A                                  7  1'Genero............:'
+     A            NUMDNI        18A  O  3 21
+     A            NOMBPAR2      20A  O  5 21
+     A                                  6  1'Edad..............:'
+     A            EDAD           3A  O  6 21
+     A            NOMBPAR1      20   O  4 21
+     A                                  7 23'M=Masculino'
+     A                                  9 23'X=SIN ESPECIFICAR'
+     A          R PERDTAWIN2
+     A*%%TS  SD  20250829  152825  CJB403307   REL-V7R5M0  5770-WDS
+     A                                      CF10(10 'CONFIRMAR')
+     A                                      CA12(12 'CANCELAR')
+     A                                      WINDOW(4 19 12 43)
+     A                                  1  1'Agregar registro'
+     A                                      COLOR(WHT)
+     A                                  4  1'Nombre............:'
+     A                                      COLOR(GRN)
+     A                                 11  1'F10=CONFIRMAR F12=CANCELAR'
+     A                                      COLOR(BLU)
+     A                                  3  1'Identificacion....:'
+     A            GENERO         1A  B  7 21
+     A                                  8 23'F=Femenino'
+     A                                  7  1'Genero............:'
+     A            NUMDNI        18A  B  3 21
+     A            NOMBPAR2      20A  B  5 21
+     A                                  6  1'Edad..............:'
+     A            EDAD           3A  B  6 21
+     A            NOMBPAR1      20   B  4 21
+     A                                  7 23'M=Masculino'
+     A                                  9 23'X=SIN ESPECIFICAR'
+     A          R PERDTAWIN3
+     A*%%TS  SD  20250829  152825  CJB403307   REL-V7R5M0  5770-WDS
+     A                                      CF10(10 'CONFIRMAR')
+     A                                      CA12(12 'CANCELAR')
+     A                                      WINDOW(4 19 12 43)
+     A                                  1  1'Actualizar registro'
+     A                                      COLOR(WHT)
+     A                                  4  1'Nombre............:'
+     A                                      COLOR(GRN)
+     A                                 11  1'F10=CONFIRMAR F12=CANCELAR'
+     A                                      COLOR(BLU)
+     A                                  3  1'Identificacion....:'
+     A            GENERO         1A  B  7 21
+     A                                  8 23'F=Femenino'
+     A                                  7  1'Genero............:'
+     A            NUMDNI        18A  O  3 21
+     A            NOMBPAR2      20A  B  5 21
+     A                                  6  1'Edad..............:'
+     A            EDAD           3A  B  6 21
+     A            NOMBPAR1      20   B  4 21
+     A                                  7 23'M=Masculino'
+     A                                  9 23'X=SIN ESPECIFICAR'
+     A          R PERDTAWIN4
+     A*%%TS  SD  20250829  152825  CJB403307   REL-V7R5M0  5770-WDS
+     A                                      CF10(10 'CONFIRMAR')
+     A                                      CA12(12 'CANCELAR')
+     A                                      WINDOW(4 19 12 43)
+     A                                  1  1'Eliminar registro'
+     A                                      COLOR(WHT)
+     A                                  4  1'Nombre............:'
+     A                                      COLOR(GRN)
+     A                                 11  1'F10=CONFIRMAR F12=CANCELAR'
+     A                                      COLOR(BLU)
+     A                                  3  1'Identificacion....:'
+     A            GENERO         1A  O  7 21
+     A                                  8 23'F=Femenino'
+     A                                  7  1'Genero............:'
+     A            NUMDNI        18A  O  3 21
+     A            NOMBPAR2      20A  O  5 21
+     A                                  6  1'Edad..............:'
+     A            EDAD           3A  O  6 21
+     A            NOMBPAR1      20   O  4 21
+     A                                  7 23'M=Masculino'
+     A                                  9 23'X=SIN ESPECIFICAR'
+     A          R PERDTAWIN5
+     A*%%TS  SD  20240925  143926  MH403286    REL-V7R4M0  5770-WDS
+     A                                      WINDOW(7 21 5 33)
+     A                                      WDWBORDER((*COLOR PNK))
+     A                                  2  1'Proceso finalizado correctamente'
+     A                                      COLOR(WHT)
+     A                                  4 17'INTRO=CONTINUAR'
+     A                                      COLOR(BLU)
+     A          R PERDTAWIN6
+     A*%%TS  SD  20250829  020204  CJB403307   REL-V7R5M0  5770-WDS
+     A                                      WINDOW(7 21 5 33)
+     A                                      WDWBORDER((*COLOR RED))
+     A                                  2  1' Error con el proceso|'
+     A                                      COLOR(WHT)
+     A                                  4 17'INTRO=CONTINUAR'
+     A                                      COLOR(BLU)
