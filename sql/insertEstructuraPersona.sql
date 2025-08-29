@@ -1,0 +1,5 @@
+INSERT INTO CJB4033071.DTASPERS
+    (IDEPER, NOMPER, EDAPER, GENPER)
+    VALUES
+    ('0801199601738', 'Jeanluc Boquin Suazo', 29, 'M'),
+    ('0801199401738', 'Kenneth Leonel Cruz', 31, 'M');
