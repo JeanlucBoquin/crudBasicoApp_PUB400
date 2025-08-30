@@ -84,13 +84,20 @@ DCL-PROC cargarDatos;
     $reg = 0;
 
     EXEC SQL DECLARE QRY_DATOS_PERSONA CURSOR FOR
-                SELECT IDEPER, NOMPER, EDAPER, GENPER, USRREG, FECREG
+                SELECT IDEPER, NOMPER, EDAPER,
+                       GENPER, USRREG, FECREG
                     FROM CJB4033071.DTASPERS;
 
     EXEC SQL OPEN QRY_DATOS_PERSONA;
     EXEC SQL FETCH QRY_DATOS_PERSONA INTO :resQuery;
 
     DOW SQLSTATE = '00000';
+        SFL_NUMDNI = resQuery.IDEPER;
+        SFL_NOMBRE = resQuery.NOMPER;
+        SFL_EDAD   = %CHAR(resQuery.EDAPER);
+        SFL_GENERO = resQuery.GENPER;
+        SFL_USRING = resQuery.USRREG;
+        SFL_FECING = %CHAR(resQuery.FECREG);
         $reg += 1;
         WRITE PERDTASFL1;
         EXEC SQL FETCH QRY_DATOS_PERSONA INTO :resQuery;
@@ -111,10 +118,20 @@ END-PROC;
 
 // ============================================================================
 // -- Procedimiento: consultarRegistro
-// -- Descripcion..:
-// --
+// -- Descripcion..: Consulta registro de DTASPERS
 // ============================================================================
 DCL-PROC consultarRegistro;
+    DCL-S NOMCOM CHAR(40);
+
+    EXEC SQL SELECT IDEPER, NOMPER, EDAPER, GENPER
+                INTO :NUMDNI, :NOMCOM, :EDAD, :GENERO
+                FROM CJB4033071.DTASPERS
+                WHERE IDEPER = :SFL_NUMDNI;
+
+    NOMBPAR1 = %SUBST(NOMCOM:1:20);
+    NOMBPAR2 = %SUBST(NOMCOM:21:20);
+
+    EXFMT PERDTAWIN1;
 END-PROC;
 
 // ============================================================================
@@ -135,10 +152,34 @@ END-PROC;
 
 // ============================================================================
 // -- Procedimiento: eliminaRegistro
-// -- Descripcion..:
-// --
+// -- Descripcion..: Eliminar registro de DTASPERS
 // ============================================================================
 DCL-PROC eliminaRegistro;
+    DCL-S NOMCOM CHAR(40);
+
+    EXEC SQL SELECT IDEPER, NOMPER, EDAPER, GENPER
+                INTO :NUMDNI, :NOMCOM, :EDAD, :GENERO
+                FROM CJB4033071.DTASPERS
+                WHERE IDEPER = :SFL_NUMDNI;
+
+    NOMBPAR1 = %SUBST(NOMCOM:1:20);
+    NOMBPAR2 = %SUBST(NOMCOM:21:20);
+    
+    DOW cancelar = *OFF;
+        EXFMT PERDTAWIN4;
+        IF confirmar = *ON;
+            EXEC SQL DELETE FROM CJB4033071.DTASPERS
+                        WHERE IDEPER = :SFL_NUMDNI;
+            IF SQLSTATE = '00000';
+                EXFMT PERDTAWIN5;
+                LEAVE;
+            ELSE;
+                EXFMT PERDTAWIN6;
+                LEAVE;
+            ENDIF;
+        ENDIF;
+    ENDDO;
+    CLEAR cancelar;
 END-PROC;
 
 // ============================================================================
