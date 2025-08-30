@@ -2,17 +2,17 @@
 // ============================================================================
 // -- Programa.....:
 // -- Descripcion..:
-// -- Desarrollador:  
+// -- Desarrollador:
 // -- Fecha........:
 // ============================================================================
 
 
 // ======================= Control de opciones ================================
-CTL=OPT DFTACTGRP(*NO) ACTGRP(*CALLER) OPTION(*SRCSTMT:*NODEBUGIO);
+CTL-OPT DFTACTGRP(*NO) ACTGRP(*CALLER) OPTION(*SRCSTMT:*NODEBUGIO);
 
 // ================== Definicion de archivo de pantalla =======================
-DCL=F PERSDSPF WORKSTN(*EXT) USAGE(*INPUT:*OUTPUT)
-               INDDS(DSIND) SFILE(PERDTASFL1:$reg); 
+DCL-F PERSDSPF WORKSTN(*EXT) USAGE(*INPUT:*OUTPUT)
+               INDDS(DSIND) SFILE(PERDTASFL1:$reg);
 
 // ================= Definicion de estructuras de datos =======================
 DCL-DS dsIND;
@@ -31,12 +31,12 @@ DCL-DS resQuery QUALIFIED;
     NOMPER  CHAR(40);
     EDAPER  ZONED(3:0);
     GENPER  CHAR(1);
-    USRREG  CHAR(10);
+    USRREG  CHAR(32);
     FECREG  DATE;
 END-DS;
 
 // ================= Definicion de variables globales =========================
-DCL=S $reg ZONED(4:0) INZ;
+DCL-S $reg ZONED(4:0) INZ;
 
 // ======================== Programa principal ================================
 DOW NOT salir;
@@ -111,40 +111,40 @@ END-PROC;
 
 // ============================================================================
 // -- Procedimiento: consultarRegistro
-// -- Descripcion..: 
-// --                
+// -- Descripcion..:
+// --
 // ============================================================================
 DCL-PROC consultarRegistro;
 END-PROC;
 
 // ============================================================================
 // -- Procedimiento: crearRegistro
-// -- Descripcion..: 
-// --                
+// -- Descripcion..:
+// --
 // ============================================================================
 DCL-PROC crearRegistro;
 END-PROC;
 
 // ============================================================================
 // -- Procedimiento: modificarRegistro
-// -- Descripcion..: 
-// --                
+// -- Descripcion..:
+// --
 // ============================================================================
 DCL-PROC modificarRegistro;
 END-PROC;
 
 // ============================================================================
 // -- Procedimiento: eliminaRegistro
-// -- Descripcion..: 
-// --                
+// -- Descripcion..:
+// --
 // ============================================================================
 DCL-PROC eliminaRegistro;
 END-PROC;
 
 // ============================================================================
 // -- Procedimiento: validarCampos
-// -- Descripcion..: 
-// --                
+// -- Descripcion..:
+// --
 // ============================================================================
 DCL-PROC validarCampos;
 END-PROC;
