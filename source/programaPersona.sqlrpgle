@@ -170,6 +170,35 @@ END-PROC;
 // --
 // ============================================================================
 DCL-PROC modificarRegistro;
+    DCL-S nombreCompleto CHAR(40);
+
+    EXEC SQL SELECT IDEPER, NOMPER, EDAPER, GENPER
+                INTO :NUMDNI, :NOMCOM, :EDAD, :GENERO
+                FROM CJB4033071.DTASPERS
+                WHERE IDEPER = :SFL_NUMDNI;
+    DOW cancelar = *OFF;
+        EXFMT PERDTAWIN3;
+        IF confirmar = *ON;
+            IF validarCampos();
+            nombreCompleto = %TRIM(NOMBPAR1) + ' ' + %TRIM(NOMBPAR2);
+            EXEC SQL UPDATE CJB4033071.DTASPERS
+                        SET IDEPER = :NUMDNI,
+                            NOMPER = :nombreCompleto,
+                            EDAD   = :EDAD,
+                            GENERO = :GENERO,
+                            USRMOD = CURRENT_USER,
+                            FECMOD = CURRENT_DATE
+                        WHERE IDEPER = :SFL_NUMDNI;
+                IF SQLSTATE = '00000';
+                    EXFMT PERDTAWIN5;
+                    LEAVE;
+                ELSE;
+                    EXFMT PERDTAWIN6;
+                    LEAVE;
+                ENDIF;
+            ENDIF;
+        ENDIF;
+    ENDDO;
 END-PROC;
 
 // ============================================================================
