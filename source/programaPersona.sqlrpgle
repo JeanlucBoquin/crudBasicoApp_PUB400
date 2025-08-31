@@ -140,6 +140,28 @@ END-PROC;
 // --
 // ============================================================================
 DCL-PROC crearRegistro;
+    DCL-S nombreCompleto CHAR(40);
+
+    DOW cancelar = *OFF;
+        EXFMT PERDTAWIN2;
+        IF confirmar = *ON;
+            IF validarCampos();
+                nombreCompleto = %TRIM(NOMBPAR1) + ' ' + %TRIM(NOMBPAR2);
+                EXEC SQL INSERT INTO CJB4033071.DTASPERS
+                        (IDEPER, NOMPER, EDAPER, GENPER, USRREG, FECREG)
+                        VALUES
+                        (:NUMDNI, :nombreCompleto, :EDAD, :GENERO, 
+                         CURRENT_USER, CURRENT_DATE);
+                IF SQLSTATE = '00000';
+                    EXFMT PERDTAWIN5;
+                    LEAVE;
+                ELSE;
+                    EXFMT PERDTAWIN6;
+                    LEAVE;
+                ENDIF;
+            ENDIF;
+        ENDIF;
+    ENDDO;
 END-PROC;
 
 // ============================================================================
