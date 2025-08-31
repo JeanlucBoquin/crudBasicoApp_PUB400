@@ -164,7 +164,7 @@ DCL-PROC eliminaRegistro;
 
     NOMBPAR1 = %SUBST(NOMCOM:1:20);
     NOMBPAR2 = %SUBST(NOMCOM:21:20);
-    
+
     DOW cancelar = *OFF;
         EXFMT PERDTAWIN4;
         IF confirmar = *ON;
@@ -188,5 +188,53 @@ END-PROC;
 // --
 // ============================================================================
 DCL-PROC validarCampos;
+    DCL-PI validarCampos IND;
+    END-PI;
+
+    DCL-S caracteresValidos CHAR(10) INZ('0123456789');
+    DCL-S existePersona ZONED(2);
+    DCL-S nombreCompleto CHAR(40);
+
+    // msgErr01 = *ON;
+    IF NUMDNI = '';
+        RETURN *OFF;
+    ENDIF;
+
+    IF %CHECK(caracteresValidos:%TRIM(NUMDNI)) <> 0;
+        RETURN *OFF;
+    ENDIF;
+
+    IF OPCION = 'A';
+        EXEC SQL SELECT COUNT(NUMDNI)
+                    INTO :existePersona
+                    FROM CJB4033071.DTASPERS
+                    WHERE IDEPER = :SFL_NUMDNI;
+        IF existePersona > 0 AND SQLSTATE = '00000';
+            RETURN *OFF;
+        ENDIF;
+    ENDIF;
+
+    nombreCompleto = %TRIM(NOMBPAR1) + ' ' + %TRIM(NOMBPAR2);
+    IF nombreCompleto = '';
+        RETURN *OFF;
+    ENDIF;
+
+    IF EDAD = '';
+        RETURN *OFF;
+    ENDIF;
+
+    IF %CHECK(caracteresValidos:%TRIM(EDAD)) <> 0;
+        RETURN *OFF;
+    ENDIF;
+
+    IF GENERO = '';
+        RETURN *OFF;
+    ENDIF;
+
+    IF GENERO <> 'M' OR GENERO <> 'F' OR GENERO <> 'X';
+        RETURN *OFF;
+    ENDIF;
+
+    RETURN *ON;
 END-PROC;
 
