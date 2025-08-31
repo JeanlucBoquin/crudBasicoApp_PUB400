@@ -1,9 +1,9 @@
 **FREE
 // ============================================================================
-// -- Programa.....:
-// -- Descripcion..:
-// -- Desarrollador:
-// -- Fecha........:
+// -- Programa.....: PERSPGM
+// -- Descripcion..: Logica de CRUD basico de personas
+// -- Desarrollador: Jeanluc Boquin
+// -- Fecha........: 28 de Agosto del 2025
 // ============================================================================
 
 
@@ -64,6 +64,7 @@ DOW NOT salir;
             eliminaRegistro();
     ENDSL;
     READC PERDTASFL1;
+    CLEAR dsIND;
     ENDDO;
 ENDDO;
 
@@ -114,7 +115,7 @@ DCL-PROC cargarDatos;
     ENDIF;
 
     finSFL = *ON;
-END-PROC;
+END-PROC cargarDatos;
 
 // ============================================================================
 // -- Procedimiento: consultarRegistro
@@ -132,12 +133,11 @@ DCL-PROC consultarRegistro;
     NOMBPAR2 = %SUBST(NOMCOM:21:20);
 
     EXFMT PERDTAWIN1;
-END-PROC;
+END-PROC consultarRegistro;
 
 // ============================================================================
 // -- Procedimiento: crearRegistro
-// -- Descripcion..:
-// --
+// -- Descripcion..: Crear registro en DTASPERS
 // ============================================================================
 DCL-PROC crearRegistro;
     DCL-S nombreCompleto CHAR(40);
@@ -162,20 +162,24 @@ DCL-PROC crearRegistro;
             ENDIF;
         ENDIF;
     ENDDO;
-END-PROC;
+END-PROC crearRegistro;
 
 // ============================================================================
 // -- Procedimiento: modificarRegistro
-// -- Descripcion..:
+// -- Descripcion..: Modificar registro en DTASPERS
 // --
 // ============================================================================
 DCL-PROC modificarRegistro;
     DCL-S nombreCompleto CHAR(40);
 
     EXEC SQL SELECT IDEPER, NOMPER, EDAPER, GENPER
-                INTO :NUMDNI, :NOMCOM, :EDAD, :GENERO
+                INTO :NUMDNI, :nombreCompleto, :EDAD, :GENERO
                 FROM CJB4033071.DTASPERS
                 WHERE IDEPER = :SFL_NUMDNI;
+    
+    NOMBPAR1 = %subst(nombreCompleto:1:20);
+    NOMBPAR2 = %subst(nombreCompleto:21:20);
+
     DOW cancelar = *OFF;
         EXFMT PERDTAWIN3;
         IF confirmar = *ON;
@@ -184,8 +188,8 @@ DCL-PROC modificarRegistro;
             EXEC SQL UPDATE CJB4033071.DTASPERS
                         SET IDEPER = :NUMDNI,
                             NOMPER = :nombreCompleto,
-                            EDAD   = :EDAD,
-                            GENERO = :GENERO,
+                            EDAPER = :EDAD,
+                            GENPER = :GENERO,
                             USRMOD = CURRENT_USER,
                             FECMOD = CURRENT_DATE
                         WHERE IDEPER = :SFL_NUMDNI;
@@ -199,7 +203,7 @@ DCL-PROC modificarRegistro;
             ENDIF;
         ENDIF;
     ENDDO;
-END-PROC;
+END-PROC modificarRegistro;
 
 // ============================================================================
 // -- Procedimiento: eliminaRegistro
@@ -230,13 +234,12 @@ DCL-PROC eliminaRegistro;
             ENDIF;
         ENDIF;
     ENDDO;
-    CLEAR cancelar;
-END-PROC;
+    // CLEAR cancelar;
+END-PROC eliminaRegistro;
 
 // ============================================================================
 // -- Procedimiento: validarCampos
-// -- Descripcion..:
-// --
+// -- Descripcion..: Verificar que cada campo de DTASPERS sean validos
 // ============================================================================
 DCL-PROC validarCampos;
     DCL-PI validarCampos IND;
@@ -245,6 +248,11 @@ DCL-PROC validarCampos;
     DCL-S caracteresValidos CHAR(10) INZ('0123456789');
     DCL-S existePersona ZONED(2);
     DCL-S nombreCompleto CHAR(40);
+    DCL-S generoValidos CHAR(1) dim(3);
+
+    generoValidos(1) = 'M';
+    generoValidos(2) = 'F';
+    generoValidos(3) = 'X';
 
     // msgErr01 = *ON;
     IF NUMDNI = '';
@@ -256,10 +264,10 @@ DCL-PROC validarCampos;
     ENDIF;
 
     IF OPCION = 'A';
-        EXEC SQL SELECT COUNT(NUMDNI)
+        EXEC SQL SELECT COUNT(:NUMDNI)
                     INTO :existePersona
                     FROM CJB4033071.DTASPERS
-                    WHERE IDEPER = :SFL_NUMDNI;
+                    WHERE IDEPER = :NUMDNI;
         IF existePersona > 0 AND SQLSTATE = '00000';
             RETURN *OFF;
         ENDIF;
@@ -282,10 +290,10 @@ DCL-PROC validarCampos;
         RETURN *OFF;
     ENDIF;
 
-    IF GENERO <> 'M' OR GENERO <> 'F' OR GENERO <> 'X';
+    IF %lookup(GENERO:generoValidos) <= 0;
         RETURN *OFF;
     ENDIF;
 
     RETURN *ON;
-END-PROC;
+END-PROC validarCampos;
 
