@@ -150,7 +150,7 @@ DCL-PROC crearRegistro;
                 EXEC SQL INSERT INTO CJB4033071.DTASPERS
                         (IDEPER, NOMPER, EDAPER, GENPER, USRREG, FECREG)
                         VALUES
-                        (:NUMDNI, :nombreCompleto, :EDAD, :GENERO, 
+                        (:NUMDNI, :nombreCompleto, :EDAD, :GENERO,   
                          CURRENT_USER, CURRENT_DATE);
                 IF SQLSTATE = '00000';
                     EXFMT PERDTAWIN5;
@@ -176,7 +176,7 @@ DCL-PROC modificarRegistro;
                 INTO :NUMDNI, :nombreCompleto, :EDAD, :GENERO
                 FROM CJB4033071.DTASPERS
                 WHERE IDEPER = :SFL_NUMDNI;
-    
+      
     NOMBPAR1 = %subst(nombreCompleto:1:20);
     NOMBPAR2 = %subst(nombreCompleto:21:20);
 
